@@ -1,15 +1,21 @@
 import random
+import os
 import discord
+import random
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 class MyClient(discord.Client):
-    #Login method
+    # Login method
     async def on_ready(self):
         print("Server started..")
 
     async def on_typing(self, channel, user, when):
         print(str(user) + "is typing since: " + str(when) + " in the channel: " + str(channel))
 
-    #Triggers when a message is send (all kinds of messages)
+    # Triggers when a message is send (all kinds of messages)
     async def on_message(self, message):
 
         if message.author == client.user:
@@ -26,7 +32,6 @@ class MyClient(discord.Client):
                     counter = counter + 1
             print(counter)
 
-
         if message.content.startswith("rps"):
             playerChoice = message.content.split(' ')[1]
             await message.channel.send("Players choice: " + playerChoice)
@@ -37,7 +42,7 @@ class MyClient(discord.Client):
 
             if playerChoice == "r" or "p" or "s":
 
-                #Rock
+                # Rock
                 if playerChoice == "r" and result == 0:
                     await message.channel.send("Computer had: " + computerChoice[0])
                     await message.channel.send("Draw...")
@@ -48,7 +53,7 @@ class MyClient(discord.Client):
                     await message.channel.send("Computer had: " + computerChoice[2])
                     await message.channel.send("You've won!")
 
-                #Paper
+                # Paper
                 if playerChoice == "p" and result == 0:
                     await message.channel.send("Computer had: " + computerChoice[0])
                     await message.channel.send("You've won!")
@@ -59,7 +64,7 @@ class MyClient(discord.Client):
                     await message.channel.send("Computer had: " + computerChoice[2])
                     await message.channel.send("You've lost!")
 
-                #Scissors
+                # Scissors
                 if playerChoice == "s" and result == 0:
                     await message.channel.send("Computer had: " + computerChoice[0])
                     await message.channel.send("You've lost!")
@@ -74,5 +79,6 @@ class MyClient(discord.Client):
                 await message.channel.send("Ungültige Eingabe..")
                 return
 
+
 client = MyClient()
-client.run("ODM5NjA0NDA3NDkwNzA3NDc2.YJMEiQ.arS0qfaKPEw3CyXeCzEtM56mJMw")
+client.run(client.run(os.getenv("DISCORD_TOKEN")))
