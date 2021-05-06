@@ -28,7 +28,7 @@ class MyClient(discord.Client):
     async def on_ready(self):
         print("Server started..")
 
-    #Triggers when a message is send (all kinds of messages)
+    #Triggers when a message is sent (all kinds of messages)
     async def on_message(self, message):
         if message.author == client.user:
             return
