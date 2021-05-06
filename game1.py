@@ -1,58 +1,78 @@
-from random import random
-
+import random
 import discord
 
 class MyClient(discord.Client):
     #Login method
     async def on_ready(self):
-        print("Im logged in...")
+        print("Server started..")
+
+    async def on_typing(self, channel, user, when):
+        print(str(user) + "is typing since: " + str(when) + " in the channel: " + str(channel))
 
     #Triggers when a message is send (all kinds of messages)
     async def on_message(self, message):
+
         if message.author == client.user:
             return
 
-        if message.content == "$help":
-            await message.channel.send("Für Schere Stein Papier spielen: $rps eingeben, \n"
-                                       " wobei r = rock, p = paper & s = scissors")
+        if message.content == "help":
+            await message.channel.send("Für Schere, Stein, Papier spielen: $rps [EINGABE] eingeben, \n"
+                                       " wobei unter EINGABE:  r = rock, p = paper & s = scissors")
 
-        if message.content.startswith("$rps"):
-            playerChoice = message.content.split(' ') [1]
-            choiceParam = 0
-            if playerChoice.lower() == "rock":
-                choiceParam = 1
-            if playerChoice.lower() == "paper":
-                choiceParam = 2
-            if playerChoice.lower == "scissors":
-                choiceParam = 3
+        if message.content.startswith("stats"):
+            counter = 0
+            async for m in message.channel.history():
+                if m.author == client.user and m.content == "You've lost!":
+                    counter = counter + 1
+            print(counter)
+
+
+        if message.content.startswith("rps"):
+            playerChoice = message.content.split(' ')[1]
+            await message.channel.send("Players choice: " + playerChoice)
+
+            computerChoice = ["Rock", "Paper", "Scissors"]
+
+            result = random.randint(0, 2)
+
+            if playerChoice == "r" or "p" or "s":
+
+                #Rock
+                if playerChoice == "r" and result == 0:
+                    await message.channel.send("Computer had: " + computerChoice[0])
+                    await message.channel.send("Draw...")
+                elif playerChoice == "r" and result == 1:
+                    await message.channel.send("Computer had: " + computerChoice[1])
+                    await message.channel.send("You've lost!")
+                elif playerChoice == "r" and result == 2:
+                    await message.channel.send("Computer had: " + computerChoice[2])
+                    await message.channel.send("You've won!")
+
+                #Paper
+                if playerChoice == "p" and result == 0:
+                    await message.channel.send("Computer had: " + computerChoice[0])
+                    await message.channel.send("You've won!")
+                elif playerChoice == "p" and result == 1:
+                    await message.channel.send("Computer had: " + computerChoice[1])
+                    await message.channel.send("Draw...")
+                elif playerChoice == "p" and result == 2:
+                    await message.channel.send("Computer had: " + computerChoice[2])
+                    await message.channel.send("You've lost!")
+
+                #Scissors
+                if playerChoice == "s" and result == 0:
+                    await message.channel.send("Computer had: " + computerChoice[0])
+                    await message.channel.send("You've lost!")
+                elif playerChoice == "s" and result == 1:
+                    await message.channel.send("Computer had: " + computerChoice[1])
+                    await message.channel.send("You've won!")
+                elif playerChoice == "s" and result == 2:
+                    await message.channel.send("Computer had: " + computerChoice[2])
+                    await message.channel.send("Draw...")
+
             else:
                 await message.channel.send("Ungültige Eingabe..")
                 return
-            result = random.randint(0, 2)
-            #Rock
-            if playerChoice == "rock" and result == 0:
-                await message.channel.send("Draw...")
-            elif playerChoice == "rock" and result == 1:
-                await message.channel.send("You've lost!")
-            elif playerChoice == "rock" and result == 2:
-                await message.channel.send("You've won!")
-
-            #Paper
-            if playerChoice == "paper" and result == 0:
-                await message.channel.send("You've won!")
-            elif playerChoice == "paper" and result == 1:
-                await message.channel.send("Draw...")
-            elif playerChoice == "paper" and result == 2:
-                await message.channel.send("You've lost!")
-
-            #Scissors
-            if playerChoice == "scissors" and result == 0:
-                await message.channel.send("You've lost!")
-            elif playerChoice == "scissors" and result == 1:
-                await message.channel.send("You've won!")
-            elif playerChoice == "scissors" and result == 2:
-                await message.channel.send("Draw...")
-
 
 client = MyClient()
-client.run("ODM5NjA0NDA3NDkwNzA3NDc2.YJMEiQ.zApp961J7u-0kyoFKfc684cAy7k")
+client.run("ODM5NjA0NDA3NDkwNzA3NDc2.YJMEiQ.arS0qfaKPEw3CyXeCzEtM56mJMw")
