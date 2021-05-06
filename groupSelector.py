@@ -1,5 +1,9 @@
-import random
+import os
 import discord
+import random
+from dotenv import load_dotenv
+
+load_dotenv()
 
 try:
     with open("users.txt", "r") as users_file:
@@ -7,6 +11,7 @@ try:
 except FileNotFoundError:
     users = []
 f = open("users.txt", "a")
+
 
 def add_user(user):
     if str(user) in users:
@@ -17,18 +22,20 @@ def add_user(user):
         users.append(str(user))
         f.flush()
 
+
 def is_himself(parnterA, partnerB):
     for i, u in enumerate(parnterA):
         if u == partnerB[i]:
             return True
     return False
 
+
 class MyClient(discord.Client):
-    #Login
+    # Login
     async def on_ready(self):
         print("Server started..")
 
-    #Triggers when a message is send (all kinds of messages)
+    # Triggers when a message is send (all kinds of messages)
     async def on_message(self, message):
         if message.author == client.user:
             return
@@ -50,13 +57,15 @@ class MyClient(discord.Client):
                 random.shuffle(partnerA)
                 random.shuffle(partnerB)
 
-            #u ist zb BISafa74#9048
+            # u ist zb BISafa74#9048
             for i, u in enumerate(partnerA):
-                user = discord.utils.get(message.guild.members, name=u.split("#")[0], discriminator=u.split("#"[1].replace("\n", "")))
-                target = discord.utils.get(message.guild.members, name=partnerB[i].split("#")[0], discriminator=partnerB[i].split("#"[1].replace("\n", "")))
+                user = discord.utils.get(message.guild.members, name=u.split("#")[0],
+                                         discriminator=u.split("#"[1].replace("\n", "")))
+                target = discord.utils.get(message.guild.members, name=partnerB[i].split("#")[0],
+                                           discriminator=partnerB[i].split("#"[1].replace("\n", "")))
                 await user.send("Partner: " + target.mention)
             await message.channel.send("Gruppen zugeteilt.")
 
 
 client = MyClient()
-client.run("ODM5NjA0NDA3NDkwNzA3NDc2.YJMEiQ.arS0qfaKPEw3CyXeCzEtM56mJMw")
+client.run(os.getenv("DISCORD_TOKEN"))
